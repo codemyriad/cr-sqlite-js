@@ -68,3 +68,50 @@ For more detailed API information, please refer to the source code and type defi
 ## License
 
 MIT License
+# @vlcn.io/crsqlite-wasm
+
+A WebAssembly build of CR-SQLite for use in the browser.
+
+## Description
+
+This package provides a WebAssembly (WASM) build of CR-SQLite, allowing you to use CR-SQLite in browser environments. It includes the necessary TypeScript typings and exports both the main module and the WASM file.
+
+## Installation
+
+```bash
+npm install @vlcn.io/crsqlite-wasm
+```
+
+## Usage
+
+```javascript
+import initWasm from "@vlcn.io/crsqlite-wasm";
+import wasmUrl from "@vlcn.io/crsqlite-wasm/crsqlite.wasm?url";
+
+const crsqlite = await initWasm(wasmUrl);
+const db = await sqlite.open("db-name");
+
+// Use the database...
+
+db.close();
+```
+
+## Features
+
+- WASM build of CR-SQLite for browser use
+- TypeScript support
+- Asynchronous API
+
+## Dependencies
+
+- @vlcn.io/wa-sqlite
+- @vlcn.io/xplat-api
+- async-mutex
+
+## License
+
+This project is part of the vlcn.io organization. Please refer to the main repository for license information.
+
+## Contributing
+
+For information on contributing to this project, please see the main vlcn.io repository.
