@@ -54,4 +54,56 @@ useSync({
 });
 ```
 
-See [App.tsx](https://github.com/vlcn-io/vite-starter/blob/e69fdc061f1d9d15af083ec837c9d09832bac41d/src/App.tsx#L26-L31) in the Vite starter.
+See [App.tsx](https://github.com/vlcn-io/vite-starter/blob/e69fdc061f1d9d15af083ec837c9d09832bac41d/src/App.tsx#L26-L31) in the Vite starter.# @vlcn.io/ws-client
+
+A WebSocket client for syncing databases using CR-SQLite.
+
+## Features
+
+- Provides a WebSocket-based transport for syncing CR-SQLite databases
+- Supports custom database providers
+- Offers a configurable client for different sync scenarios
+
+## Installation
+
+```bash
+npm install @vlcn.io/ws-client
+```
+
+## Usage
+
+```javascript
+import { defaultConfig, createClient } from "@vlcn.io/ws-client";
+import { DB } from "./your-db-implementation";
+
+// Configure the client
+const config = {
+  ...defaultConfig,
+  dbProvider: async (dbname) => {
+    // Your implementation to provide a DB instance
+    return new DB(dbname);
+  },
+};
+
+// Create a client
+const client = createClient(config);
+
+// Connect to a room
+const room = await client.connect("your-db-name", "your-room-name", "wss://your-websocket-server.com");
+
+// The room is now syncing
+// You can use the room object to manage the connection and sync state
+```
+
+## API Highlights
+
+- `createClient(config)`: Create a new client instance
+- `client.connect(dbName, roomName, url)`: Connect to a sync room
+- `config.dbProvider`: Custom function to provide DB instances
+- `config.transportProvider`: Custom function to provide Transport instances
+
+For more detailed API information, please refer to the source code and type definitions.
+
+## License
+
+MIT License
