@@ -1,13 +1,3 @@
-try {
-  const fs = require('fs');
-  const path = require('path');
-  const marked = require('marked');
-  const cheerio = require('cheerio');
-} catch (error) {
-  console.error('Error: Required modules not found. Please ensure Node.js is installed and run "npm install marked cheerio"');
-  process.exit(1);
-}
-
 const fs = require('fs');
 const path = require('path');
 const marked = require('marked');
