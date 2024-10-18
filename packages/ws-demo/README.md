@@ -3,18 +3,38 @@
 A demonstration package for real-time database synchronization using WebSockets and PartyKit.
 
 ## Features
-- Syncs database state across clients in real-time
-- Utilizes PartyKit rooms for efficient multi-client communication
-- Integrates @vlcn.io/ws-client for robust state management
+- Real-time database state synchronization across clients
+- Efficient multi-client communication via PartyKit rooms
+- Robust state management with @vlcn.io/ws-client
 
-## PartyKit Room
-- Each database is associated with a unique PartyKit room
-- Rooms facilitate real-time updates between connected clients
-- Ensures data consistency across multiple users/devices
+## What is PartyKit?
+PartyKit is a platform for building real-time multiplayer applications. It provides:
+- Serverless WebSocket rooms
+- Durable objects for state persistence
+- Easy deployment and scaling
+
+## Installation
+1. Install PartyKit CLI:
+   ```
+   npm install -g partykit
+   ```
+2. Install package dependencies:
+   ```
+   npm install
+   ```
+
+## Integration with @vlcn.io/ws-demo
+1. Configure database and WebSocket connection in `src/syncConfig.ts`
+2. Initialize the worker in your app using `src/worker.ts`
+3. Create a PartyKit server file (e.g., `party/index.ts`) to handle room logic
+4. Deploy your PartyKit server:
+   ```
+   partykit deploy
+   ```
+5. Update `transportProvider` in `src/syncConfig.ts` with your PartyKit server URL
 
 ## Usage
-1. Configure your database and WebSocket connection in `src/syncConfig.ts`
-2. Initialize the worker in your application using `src/worker.ts`
-3. Connect to a PartyKit room to start syncing
+1. Start your application
+2. Connect to a PartyKit room to begin syncing
 
-For detailed configuration, refer to `src/worker.ts` and `src/syncConfig.ts`.
+For detailed configuration, see `src/worker.ts` and `src/syncConfig.ts`.
