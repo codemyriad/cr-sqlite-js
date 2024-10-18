@@ -1,21 +1,31 @@
 # @vlcn.io/ws-client
 
-A WebSocket client to do streaming database sync. Meant to be paired with the `@vlcn.io/ws-server` package or any server that speaks the same protocol.
+A WebSocket client for syncing databases using CR-SQLite, designed to be paired with the `@vlcn.io/ws-server` package or any server that speaks the same protocol.
 
-Setup is pretty trivial as the `React` bindings support websocket sync. The [vlcn vite starter](https://github.com/vlcn-io/vite-starter) uses WebSocket sync as well.
+## Features
 
-# Setup
+- Provides a WebSocket-based transport for syncing CR-SQLite databases
+- Supports custom database providers
+- Offers a configurable client for different sync scenarios
+- Integrates easily with React through custom hooks
 
-## Create a Sync Worker
+## Installation
 
-The sync worker file will be loaded and run in its own worker thread. The config will only change when moving between platforms (e.g., React Native vs Web vs Tauri vs Electron).
+```bash
+npm install @vlcn.io/ws-client
+```
 
-For web, the config looks like:
+## Setup
 
-```ts
+### 1. Create a Sync Worker
+
+Create a sync worker file that will run in its own worker thread. The configuration may vary depending on the platform (e.g., React Native, Web, Tauri, Electron).
+
+For web, create a file (e.g., `sync-worker.ts`) with the following content:
+
+```typescript
 import { Config, defaultConfig } from "@vlcn.io/ws-client";
 import { start } from "@vlcn.io/ws-client/worker.js";
-// Interface to WASM sqlite
 import { createDbProvider } from "@vlcn.io/ws-browserdb";
 
 export const config: Config = {
@@ -26,73 +36,49 @@ export const config: Config = {
 start(config);
 ```
 
-Put that code in its own file such as [sync-worker.ts](https://github.com/vlcn-io/vite-starter/blob/main/src/sync-worker.ts).
+### 2. Instantiate the SyncWorker
 
-## Instantiate the SyncWorker
+In your application's bootstrap process, create a single instance of your worker:
 
-Somewhere in the bootstrapping of your application, create an instance of your worker. You should only do this _once_ for your application. The sync worker can sync any number of databases you'd like so there's no need to create many sync workers.
-
-The sync worker is also smart enough to coordinate between tabs and other workers. In other words, if many tabs are open on the same page and they all start the same worker, only one will actively sync a given database at a time.
-
-```ts
+```typescript
 import SyncWorker from "./sync-worker.js?worker";
 const worker = new SyncWorker();
 ```
 
-See [App.tsx](https://github.com/vlcn-io/vite-starter/blob/e69fdc061f1d9d15af083ec837c9d09832bac41d/src/App.tsx#L23) in the Vite starter.
+### 3. Start Syncing
 
-## Kick Off Sync
+For React applications, use the `useSync` hook:
 
-If you're using the React bindings this is pretty simple. Just call the `useSync` hook:
+```typescript
+import { useSync } from "@vlcn.io/react";
 
-```ts
-useSync({
-  dbname,
-  endpoint: `ws://host/sync`,
-  room: dbname,
-  worker,
-});
+function App() {
+  useSync({
+    dbname: "your-db-name",
+    endpoint: `ws://your-host/sync`,
+    room: "your-room-name",
+    worker,
+  });
+
+  // ... rest of your component
+}
 ```
 
-See [App.tsx](https://github.com/vlcn-io/vite-starter/blob/e69fdc061f1d9d15af083ec837c9d09832bac41d/src/App.tsx#L26-L31) in the Vite starter.# @vlcn.io/ws-client
-
-A WebSocket client for syncing databases using CR-SQLite.
-
-## Features
-
-- Provides a WebSocket-based transport for syncing CR-SQLite databases
-- Supports custom database providers
-- Offers a configurable client for different sync scenarios
-
-## Installation
-
-```bash
-npm install @vlcn.io/ws-client
-```
-
-## Usage
+## Usage (Non-React)
 
 ```javascript
 import { defaultConfig, createClient } from "@vlcn.io/ws-client";
 import { DB } from "./your-db-implementation";
 
-// Configure the client
 const config = {
   ...defaultConfig,
-  dbProvider: async (dbname) => {
-    // Your implementation to provide a DB instance
-    return new DB(dbname);
-  },
+  dbProvider: async (dbname) => new DB(dbname),
 };
 
-// Create a client
 const client = createClient(config);
-
-// Connect to a room
 const room = await client.connect("your-db-name", "your-room-name", "wss://your-websocket-server.com");
 
 // The room is now syncing
-// You can use the room object to manage the connection and sync state
 ```
 
 ## API Highlights
@@ -103,6 +89,11 @@ const room = await client.connect("your-db-name", "your-room-name", "wss://your-
 - `config.transportProvider`: Custom function to provide Transport instances
 
 For more detailed API information, please refer to the source code and type definitions.
+
+## Examples
+
+- [Vite Starter](https://github.com/vlcn-io/vite-starter): A starter project using WebSocket sync
+- [App.tsx in Vite Starter](https://github.com/vlcn-io/vite-starter/blob/main/src/App.tsx): Example of using the `useSync` hook
 
 ## License
 

@@ -1,12 +1,39 @@
 {
-  "private": true,
-  "version": "0.0.0",
-  "packageManager": "pnpm@7.9.0",
-  "engines": {
-    "node": ">=19",
-    "pnpm": ">=7"
+  "name": "@vlcn.io/ws-client",
+  "version": "0.1.0",
+  "description": "A WebSocket client for syncing databases using CR-SQLite",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "websocket",
+    "sync",
+    "cr-sqlite",
+    "database"
+  ],
+  "author": "vlcn.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlcn-io/js.git",
+    "directory": "packages/ws-client"
   },
   "dependencies": {
-    "@changesets/cli": "^2.26.1"
+    "@vlcn.io/xplat-api": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "jest": "^29.5.0",
+    "@types/jest": "^29.5.0"
+  },
+  "peerDependencies": {
+    "@vlcn.io/react": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
