@@ -64,3 +64,46 @@ Manages reactive database transactions, collecting writes and processing them po
 - Folds multiple calls to the same `useQuery` into a single database query
 
 This package aims to simplify the implementation of a fully reactive query system.
+# rx-query
+
+A reactive query system for efficient database operations.
+
+## Features
+
+- Query AST manipulation
+- Dataflow rewriting
+- Relation caching
+- Transactional operations
+
+## Components
+
+### QueryAST
+
+Provides types and functions for working with query Abstract Syntax Trees (ASTs).
+
+- `QueryAST`: Type definition for the query AST.
+- `queryToAST()`: Converts a query string to an AST.
+- `astToQuery()`: Converts an AST back to a query string.
+
+### QueryToDataflow
+
+Handles the rewriting of queries into dataflow representations.
+
+- `rewrittenQueryToDataflow()`: Converts a query AST to a dataflow representation.
+
+### RelationCache
+
+Implements caching for relation data to optimize join operations.
+
+### RxDbTx
+
+Manages reactive database transactions, collecting writes and processing them post-commit.
+
+## Benefits
+
+- Coalesces duplicate queries
+- Implements query caching
+- Collects read queries across micro-tasks into a single IndexedDB transaction
+- Folds multiple calls to the same `useQuery` into a single database query
+
+This package aims to simplify the implementation of a fully reactive query system.
