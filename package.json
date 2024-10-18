@@ -38,6 +38,7 @@
     "node": ">=14"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/docs"
   ]
 }
