@@ -3,11 +3,12 @@ node-deps = ./packages/crsqlite-wasm/node_modules
 wasm-file = ./packages/crsqlite-wasm/dist/crsqlite.wasm
 tsbuildinfo = ./tsbuild-all/tsconfig.tsbuildinfo
 typed-sql-pkg = ./deps/typed-sql/packages/type-gen/pkg/package.json
+docs = ./documentation.html
 
 .EXPORT_ALL_VARIABLES:
 	CRSQLITE_NOPREBUILD = 1
 
-all: $(wasm-file) $(tsbuildinfo)
+all: $(wasm-file) $(tsbuildinfo) $(docs)
 
 $(git-deps):
 	git submodule update --init --recursive
@@ -24,6 +25,9 @@ $(wasm-file): $(git-deps)
 $(tsbuildinfo): $(node-deps) $(wasm-file) FORCE
 	cd tsbuild-all && pnpm run build
 
+$(docs): FORCE
+	pnpm run docs
+
 test: $(tsbuildinfo) $(wasm-file) FORCE
 	./test.sh
 
@@ -31,7 +35,8 @@ clean:
 	./deep-clean.sh
 	cd deps/wa-sqlite && make clean
 	cd deps/cr-sqlite/core/ && make clean
+	rm -f $(docs)
 
 FORCE:
 
-.PHONY: all test clean
+.PHONY: all test clean docs

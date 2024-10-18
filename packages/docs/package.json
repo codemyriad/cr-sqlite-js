@@ -1,0 +1,19 @@
+{
+  "name": "@vlcn.io/docs",
+  "version": "0.1.0",
+  "description": "Documentation generator for CR-SQLite",
+  "main": "src/build-docs.js",
+  "scripts": {
+    "build": "node src/build-docs.js"
+  },
+  "keywords": [
+    "documentation",
+    "cr-sqlite"
+  ],
+  "author": "vlcn.io",
+  "license": "MIT",
+  "dependencies": {
+    "marked": "^4.0.0",
+    "cheerio": "^1.0.0-rc.10"
+  }
+}
