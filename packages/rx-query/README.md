@@ -1,109 +1,71 @@
 # @vlcn.io/rx-query
 
-WIP - more efficient query based reactivity.
+A highly efficient reactive query system for database operations.
 
-`rx-tbl` would re-run all queries that hit a given table when a write hit that table. This is problematic for apps with hundreds of queries against the same table.
+## Overview
 
-Why would this happen? Well imagine a presentation editor. You have little slide thumbnails or previews. Each of these previews would query a `component` table to get the components belonging to the slide. Any time you add a component on a slide, each preview would re-query the component table. If you have hundreds of slides this could be hundreds of queries with the dumb `rx-tbl` approach.
+`rx-query` is an advanced query-based reactivity system designed to optimize database operations in applications with complex data requirements. It significantly improves upon the `rx-tbl` approach by selectively updating only the queries affected by specific writes, rather than re-running all queries that touch a given table.
 
-`rx-query` looks at the write being made and finds the exact queries that would be impacted by that write.
+## Key Features
 
-# Where this is efficient
+- Efficient query-based reactivity
+- Selective query updates based on write operations
+- Support for single table queries and single-hop joins
+- Query AST manipulation and dataflow rewriting
+- Relation caching for optimized join operations
+- Transactional write processing
 
+## Use Case Example
+
+Imagine a presentation editor with hundreds of slides, each containing multiple components. With `rx-query`, adding a component to a single slide won't trigger unnecessary re-queries for all other slides, significantly improving performance in large-scale applications.
+
+## Efficiency Breakdown
+
+### Highly Efficient For:
 - Single table queries (`SELECT * FROM foo WHERE ...`)
-- Queries that do a single hop join (`SELECT * FROM foo JOIN bar ON foo.id = bar.foo_id WHERE ...`)
-- Updates that include WHERE conditions on the same columns used by select queries
-- Deletes that include WHERE conditions on the same columns used by select queries
-- Inserts
+- Single-hop join queries (`SELECT * FROM foo JOIN bar ON foo.id = bar.foo_id WHERE ...`)
+- Updates and deletes with WHERE conditions matching select query columns
+- Insert operations
 
-# Where this is inefficient
+### Less Efficient For:
+- Multi-hop join queries
+- Updates or deletes without WHERE conditions matching select query columns
+- Scenarios with thousands of active queries against a single table (optimization planned)
 
-- Queries that do multi-hop joins (`SELECT foo.* FROM foo JOIN bar ON foo.id = bar.foo_id JOIN baz on bar.baz_id = baz.id`)
-- Updates or deletes that do not include WHERE conditions on the same columns used by select queries
-- When thousands of queries against the same table are active. We currently scan the list of active queries for a table on insert. This is fine up to a few hundred active queries against a single table. In the future we'll introduce range trees to optimize this case.
-# rx-query
+## Core Components
 
-A reactive query system for efficient database operations.
+1. **QueryAST**: Handles query Abstract Syntax Tree operations
+   - `QueryAST`: Type definition for query ASTs
+   - `queryToAST()`: Converts query strings to ASTs
+   - `astToQuery()`: Converts ASTs back to query strings
 
-## Features
+2. **QueryToDataflow**: Manages query rewriting for dataflow optimization
+   - `rewrittenQueryToDataflow()`: Converts query ASTs to dataflow representations
 
-- Query AST manipulation
-- Dataflow rewriting
-- Relation caching
-- Transactional operations
+3. **RelationCache**: Implements caching for optimized join operations
 
-## Components
-
-### QueryAST
-
-Provides types and functions for working with query Abstract Syntax Trees (ASTs).
-
-- `QueryAST`: Type definition for the query AST.
-- `queryToAST()`: Converts a query string to an AST.
-- `astToQuery()`: Converts an AST back to a query string.
-
-### QueryToDataflow
-
-Handles the rewriting of queries into dataflow representations.
-
-- `rewrittenQueryToDataflow()`: Converts a query AST to a dataflow representation.
-
-### RelationCache
-
-Implements caching for relation data to optimize join operations.
-
-### RxDbTx
-
-Manages reactive database transactions, collecting writes and processing them post-commit.
+4. **RxDbTx**: Manages reactive database transactions
+   - Collects writes and processes them post-commit
 
 ## Benefits
 
-- Coalesces duplicate queries
-- Implements query caching
-- Collects read queries across micro-tasks into a single IndexedDB transaction
-- Folds multiple calls to the same `useQuery` into a single database query
+- Eliminates duplicate queries
+- Implements efficient query caching
+- Consolidates read queries across micro-tasks into single IndexedDB transactions
+- Optimizes multiple calls to the same `useQuery` into a single database query
 
-This package aims to simplify the implementation of a fully reactive query system.
-# rx-query
+## Future Improvements
 
-A reactive query system for efficient database operations.
+- Implementation of range trees to optimize scenarios with thousands of active queries against a single table
 
-## Features
+## Getting Started
 
-- Query AST manipulation
-- Dataflow rewriting
-- Relation caching
-- Transactional operations
+(Add installation instructions and basic usage examples here)
 
-## Components
+## Contributing
 
-### QueryAST
+(Add contribution guidelines here)
 
-Provides types and functions for working with query Abstract Syntax Trees (ASTs).
+## License
 
-- `QueryAST`: Type definition for the query AST.
-- `queryToAST()`: Converts a query string to an AST.
-- `astToQuery()`: Converts an AST back to a query string.
-
-### QueryToDataflow
-
-Handles the rewriting of queries into dataflow representations.
-
-- `rewrittenQueryToDataflow()`: Converts a query AST to a dataflow representation.
-
-### RelationCache
-
-Implements caching for relation data to optimize join operations.
-
-### RxDbTx
-
-Manages reactive database transactions, collecting writes and processing them post-commit.
-
-## Benefits
-
-- Coalesces duplicate queries
-- Implements query caching
-- Collects read queries across micro-tasks into a single IndexedDB transaction
-- Folds multiple calls to the same `useQuery` into a single database query
-
-This package aims to simplify the implementation of a fully reactive query system.
+(Add license information here)
