@@ -2,9 +2,11 @@
 
 Common utilities and types for direct connections in the vlcn.io ecosystem.
 
-## Description
+## Features
 
-This package provides shared functionality for direct connections used across different environments (browser, Node.js, etc.) in the vlcn.io project. It includes common utilities, types, and interfaces that are used by other direct connection packages.
+- Shared functionality for direct connections across different environments
+- Common types and interfaces for direct connection packages
+- Serialization utilities for JSON and binary data
 
 ## Installation
 
@@ -14,34 +16,27 @@ npm install @vlcn.io/direct-connect-common
 
 ## Usage
 
-This package exports its main functionality from `dist/index.js`. Import and use the components as needed in your project.
+```javascript
+import { ISerializer, hexToBytes, tags } from "@vlcn.io/direct-connect-common";
 
-## Dependencies
+// Use the imported utilities and types in your project
+```
 
-This package has a single runtime dependency:
+## Key Exports
 
-- lib0: A library providing various utility functions
+- `ISerializer`: Interface for message serialization
+- `JsonSerializer`: JSON serialization implementation
+- `BinarySerializer`: Binary serialization implementation
+- `SerializerFactory`: Factory for creating serializers
+- Various utility functions and type definitions
 
 ## Scripts
 
-- Build: `npm run build`
-- Watch: `npm run watch`
-- Test: `npm run test`
-- Deep Clean: `npm run deep-clean`
-
-## Testing
-
-This package uses Vitest for testing. Run the tests using:
-
-```bash
-npm run test
-```
-
-## Repository
-
-This package is part of the vlcn-io/js repository. You can find the source code at:
-[https://github.com/vlcn-io/js/tree/main/js/packages/direct-connect-common](https://github.com/vlcn-io/js/tree/main/js/packages/direct-connect-common)
+- `npm run build`: Build the package
+- `npm run watch`: Watch for changes and rebuild
+- `npm run test`: Run tests using Vitest
+- `npm run deep-clean`: Perform a deep clean
 
 ## License
 
-Please refer to the main repository for license information.
+MIT License. See the main repository for full license information.
